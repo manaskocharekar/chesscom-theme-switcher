@@ -1,0 +1,196 @@
+/* Chess.com Board Color Customizer - Popup Styles */
+
+:root {
+  --bg-primary: #090d16;
+  --bg-secondary: #121824;
+  --bg-card: rgba(22, 30, 49, 0.6);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-gradient: linear-gradient(135deg, #a78bfa 0%, #f43f5e 100%);
+  --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 320px;
+  background-color: var(--bg-primary);
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  user-select: none;
+  overflow: hidden;
+}
+
+.container {
+  padding: 20px;
+  background: radial-gradient(circle at 50% 0%, rgba(167, 139, 250, 0.12) 0%, transparent 75%);
+}
+
+/* Header Styles */
+header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.logo {
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.3));
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Themes List */
+.themes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Theme Card - Base */
+.theme-card {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.theme-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.theme-card:active {
+  transform: translateY(0);
+}
+
+/* Selected State with Gradient Border */
+.theme-card.selected {
+  border-color: transparent;
+  background: linear-gradient(var(--bg-secondary), var(--bg-secondary)) padding-box,
+              var(--accent-gradient) border-box;
+  box-shadow: 0 0 16px rgba(167, 139, 250, 0.25);
+}
+
+/* Preview Grid */
+.theme-preview {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-right: 14px;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+}
+
+.sq {
+  width: 18px;
+  height: 18px;
+}
+
+/* Theme Colors */
+.emerald .sq.light { background-color: #eaf0eb; }
+.emerald .sq.dark { background-color: #3f6b55; }
+
+.ocean .sq.light { background-color: #ebf2fa; }
+.ocean .sq.dark { background-color: #466a8a; }
+
+.amethyst .sq.light { background-color: #f1ecf6; }
+.amethyst .sq.dark { background-color: #6c568c; }
+
+/* Info Section */
+.theme-info {
+  flex-grow: 1;
+}
+
+.theme-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.theme-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Indicator Circle */
+.indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.indicator svg {
+  width: 12px;
+  height: 12px;
+  color: #ffffff;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-card:hover .indicator {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-card.selected .indicator {
+  border-color: transparent;
+  background: var(--accent-gradient);
+}
+
+.theme-card.selected .indicator svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Footer Styling */
+footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.2px;
+}

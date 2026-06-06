@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess.com Board Customizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-area">
+        <svg class="logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="20" height="20" rx="4" fill="url(#logo-grad)"/>
+          <path d="M6 6h4v4H6zm8 0h4v4h-4zM6 14h4v4H6zm8 0h4v4h-4z" fill="#ffffff" fill-opacity="0.9"/>
+          <defs>
+            <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#a78bfa"/>
+              <stop offset="1" stop-color="#f43f5e"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <h1>Board Customizer</h1>
+      </div>
+      <p class="subtitle">Elevate your Chess.com aesthetics</p>
+    </header>
+
+    <main class="themes-list">
+      <!-- Emerald Theme -->
+      <div class="theme-card" data-theme="emerald">
+        <div class="theme-preview emerald">
+          <div class="sq light"></div>
+          <div class="sq dark"></div>
+          <div class="sq dark"></div>
+          <div class="sq light"></div>
+        </div>
+        <div class="theme-info">
+          <div class="theme-name">Emerald Velvet</div>
+          <div class="theme-desc">Rich sage & mint jade</div>
+        </div>
+        <div class="indicator">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Ocean Theme -->
+      <div class="theme-card" data-theme="ocean">
+        <div class="theme-preview ocean">
+          <div class="sq light"></div>
+          <div class="sq dark"></div>
+          <div class="sq dark"></div>
+          <div class="sq light"></div>
+        </div>
+        <div class="theme-info">
+          <div class="theme-name">Midnight Ocean</div>
+          <div class="theme-desc">Nordic slate & deep ice</div>
+        </div>
+        <div class="indicator">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Amethyst Theme -->
+      <div class="theme-card" data-theme="amethyst">
+        <div class="theme-preview amethyst">
+          <div class="sq light"></div>
+          <div class="sq dark"></div>
+          <div class="sq dark"></div>
+          <div class="sq light"></div>
+        </div>
+        <div class="theme-info">
+          <div class="theme-name">Amethyst Dusk</div>
+          <div class="theme-desc">Mystical lavender & royal plum</div>
+        </div>
+        <div class="indicator">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <span>Apply instantly to active Chess.com tabs</span>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

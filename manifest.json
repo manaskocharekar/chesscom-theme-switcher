@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Chess.com Board Color Customizer",
+  "version": "1.0",
+  "description": "Customize your chess.com board with 3 premium, elegant color combinations.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.chess.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.svg",
+      "48": "icon.svg",
+      "128": "icon.svg"
+    }
+  },
+  "icons": {
+    "16": "icon.svg",
+    "48": "icon.svg",
+    "128": "icon.svg"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.chess.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}
