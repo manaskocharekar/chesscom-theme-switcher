@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.theme-card');
 
   // Load currently active theme and select corresponding card
-  chrome.storage.local.get({ boardTheme: 'emerald' }, (result) => {
+  chrome.storage.local.get({ boardTheme: 'india' }, (result) => {
     const activeTheme = result.boardTheme;
     const activeCard = document.querySelector(`.theme-card[data-theme="${activeTheme}"]`);
     if (activeCard) {
@@ -24,6 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
       // Update selection in chrome storage
       const selectedTheme = card.getAttribute('data-theme');
       chrome.storage.local.set({ boardTheme: selectedTheme });
+
+      // Send message to the active Chess.com tab for instant theme swap
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0]) {
+          chrome.tabs.sendMessage(tabs[0].id, { action: 'setTheme', theme: selectedTheme }, () => {
+            // Silence potential lastError if content script isn't loaded on tab
+            if (chrome.runtime.lastError) {
+              // Ignore
+            }
+          });
+        }
+      });
     });
   });
 });

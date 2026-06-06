@@ -14,7 +14,7 @@
 body {
   margin: 0;
   padding: 0;
-  width: 320px;
+  width: 330px; /* Slightly wider to accommodate custom piece previews */
   background-color: var(--bg-primary);
   font-family: var(--font-family);
   color: var(--text-primary);
@@ -105,6 +105,15 @@ h1 {
   box-shadow: 0 0 16px rgba(167, 139, 250, 0.25);
 }
 
+/* Preview Wrapper containing board and piece */
+.theme-preview-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 14px;
+  flex-shrink: 0;
+}
+
 /* Preview Grid */
 .theme-preview {
   display: grid;
@@ -113,7 +122,6 @@ h1 {
   height: 36px;
   border-radius: 8px;
   overflow: hidden;
-  margin-right: 14px;
   box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
   flex-shrink: 0;
 }
@@ -123,15 +131,26 @@ h1 {
   height: 18px;
 }
 
-/* Theme Colors */
-.emerald .sq.light { background-color: #eaf0eb; }
-.emerald .sq.dark { background-color: #3f6b55; }
+/* Theme Colors for Board Previews */
+.original .sq.light { background-color: #eeeed2; }
+.original .sq.dark { background-color: #769656; }
 
-.ocean .sq.light { background-color: #ebf2fa; }
-.ocean .sq.dark { background-color: #466a8a; }
+.india .sq.light { background-color: #fef6eb; }
+.india .sq.dark { background-color: #b95e34; }
 
-.amethyst .sq.light { background-color: #f1ecf6; }
-.amethyst .sq.dark { background-color: #6c568c; }
+.iran .sq.light { background-color: #eefbfa; }
+.iran .sq.dark { background-color: #0c766e; }
+
+.russia .sq.light { background-color: #f1f5f9; }
+.russia .sq.dark { background-color: #961b1b; }
+
+/* Custom Piece Preview Icon */
+.piece-preview-icon {
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+  flex-shrink: 0;
+}
 
 /* Info Section */
 .theme-info {
