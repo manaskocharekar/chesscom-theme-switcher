@@ -6,262 +6,196 @@ const THEMES = {
     light: '#fef6eb', // Cardamom Ivory
     dark: '#b95e34',  // Terracotta Saffron
     lightCoord: '#b95e34',
-    darkCoord: '#fef6eb',
-    wStroke: '#d4af37', // Gold outline for white pieces
-    bStroke: '#ffd700'  // Bright gold outline for black pieces
+    darkCoord: '#fef6eb'
   },
   iran: {
     name: 'Esfahan Turquoise',
     light: '#eefbfa', // Teal Ice
     dark: '#0c766e',  // Esfahan Turquoise
     lightCoord: '#0c766e',
-    darkCoord: '#eefbfa',
-    wStroke: '#e2e8f0', // Silver/light outline
-    bStroke: '#94a3b8'  // Steel outline
+    darkCoord: '#eefbfa'
   },
   russia: {
     name: 'Moscow Crimson',
     light: '#f1f5f9', // Neva Snow
     dark: '#961b1b',  // Moscow Crimson
     lightCoord: '#961b1b',
-    darkCoord: '#f1f5f9',
-    wStroke: '#dc2626', // Crimson red outline
-    bStroke: '#ef4444'  // Bright red outline
+    darkCoord: '#f1f5f9'
   }
 };
 
-// Generate 8x8 checkerboard SVG background URL-encoded
-function generateSvgUrl(lightColor, darkColor) {
-  // Checkerboard path for the 32 dark squares on an 8x8 grid
-  const pathD = [
-    "M1,0h1v1h-1z M3,0h1v1h-1z M5,0h1v1h-1z M7,0h1v1h-1z",
-    "M0,1h1v1h-1z M2,1h1v1h-1z M4,1h1v1h-1z M6,1h1v1h-1z",
-    "M1,2h1v1h-1z M3,2h1v1h-1z M5,2h1v1h-1z M7,2h1v1h-1z",
-    "M0,3h1v1h-1z M2,3h1v1h-1z M4,3h1v1h-1z M6,3h1v1h-1z",
-    "M1,4h1v1h-1z M3,4h1v1h-1z M5,4h1v1h-1z M7,4h1v1h-1z",
-    "M0,5h1v1h-1z M2,5h1v1h-1z M4,5h1v1h-1z M6,5h1v1h-1z",
-    "M1,6h1v1h-1z M3,6h1v1h-1z M5,6h1v1h-1z M7,6h1v1h-1z",
-    "M0,7h1v1h-1z M2,7h1v1h-1z M4,7h1v1h-1z M6,7h1v1h-1z"
-  ].join(" ");
+// Generate 8x8 checkerboard SVG background URL-encoded with subtle watermarks
+function generateSvgUrl(lightColor, darkColor, themeKey) {
+  // Checkerboard coordinates for the 32 dark squares
+  const darkSquares = [
+    { x: 1, y: 0 }, { x: 3, y: 0 }, { x: 5, y: 0 }, { x: 7, y: 0 },
+    { x: 0, y: 1 }, { x: 2, y: 1 }, { x: 4, y: 1 }, { x: 6, y: 1 },
+    { x: 1, y: 2 }, { x: 3, y: 2 }, { x: 5, y: 2 }, { x: 7, y: 2 },
+    { x: 0, y: 3 }, { x: 2, y: 3 }, { x: 4, y: 3 }, { x: 6, y: 3 },
+    { x: 1, y: 4 }, { x: 3, y: 4 }, { x: 5, y: 4 }, { x: 7, y: 4 },
+    { x: 0, y: 5 }, { x: 2, y: 5 }, { x: 4, y: 5 }, { x: 6, y: 5 },
+    { x: 1, y: 6 }, { x: 3, y: 6 }, { x: 5, y: 6 }, { x: 7, y: 6 },
+    { x: 0, y: 7 }, { x: 2, y: 7 }, { x: 4, y: 7 }, { x: 6, y: 7 }
+  ];
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="100%" height="100%"><rect width="8" height="8" fill="${lightColor}"/><path d="${pathD}" fill="${darkColor}"/></svg>`;
-  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-}
+  let defs = '';
+  let motifInstances = '';
+  let flagDef = '';
+  let flagInstances = '';
 
-// Generate country-themed custom vector chess pieces
-function generatePieceSvg(themeKey, pieceType, isWhite) {
-  const theme = THEMES[themeKey] || THEMES.india;
-  
-  // Custom gradient settings for each theme
-  const gradientId = `grad-${themeKey}-${pieceType}-${isWhite ? 'w' : 'b'}`;
-  let gradStart, gradEnd, strokeColor;
-  const strokeWidth = 2.2;
-  
   if (themeKey === 'india') {
-    gradStart = isWhite ? '#fffdf5' : '#4a250f';
-    gradEnd = isWhite ? '#eedcb3' : '#1e0c03';
-    // Deep dark brown stroke for white pieces, light ivory stroke for black pieces
-    strokeColor = isWhite ? '#361805' : '#eedcb3';
+    // Clean, proper Taj Mahal silhouette centered towards the center squares of the board
+    defs = `
+      <g id="motif" stroke="#ffffff" stroke-width="0.025" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.16">
+        <!-- Plinths -->
+        <rect x="2.7" y="4.8" width="2.6" height="0.1" />
+        <rect x="2.9" y="4.7" width="2.2" height="0.1" />
+
+        <!-- Main Mausoleum Building Frame -->
+        <path d="M 3.1,4.7 L 3.1,3.9 L 4.9,3.9 L 4.9,4.7 Z" />
+
+        <!-- Central Arched Portal (Pishtaq) -->
+        <path d="M 3.55,4.7 L 3.55,4.0 C 3.55,3.9 3.65,3.85 4.0,3.85 C 4.35,3.85 4.45,3.9 4.45,4.0 L 4.45,4.7" />
+        <path d="M 3.7,4.7 L 3.7,4.3 C 3.7,4.2 3.8,4.15 4.0,4.15 C 4.2,4.15 4.3,4.2 4.3,4.3 L 4.3,4.7" />
+
+        <!-- Left Side Portal Arches -->
+        <path d="M 3.2,4.7 L 3.2,4.35 C 3.2,4.3 3.25,4.3 3.325,4.3 C 3.4,4.3 3.45,4.3 3.45,4.35 L 3.45,4.7" />
+        <path d="M 3.2,4.3 L 3.2,3.95 C 3.2,3.9 3.25,3.9 3.325,3.9 C 3.4,3.9 3.45,3.9 3.45,3.95 L 3.45,4.3" />
+
+        <!-- Right Side Portal Arches -->
+        <path d="M 4.55,4.7 L 4.55,4.35 C 4.55,4.3 4.6,4.3 4.675,4.3 C 4.75,4.3 4.8,4.3 4.8,4.35 L 4.8,4.7" />
+        <path d="M 4.55,4.3 L 4.55,3.95 C 4.55,3.9 4.6,3.9 4.675,3.9 C 4.75,3.9 4.8,3.9 4.8,3.95 L 4.8,4.3" />
+
+        <!-- Main Center Dome -->
+        <rect x="3.65" y="3.9" width="0.7" height="0.15" /> <!-- Drum -->
+        <path d="M 3.6,3.75 C 3.45,3.5 3.5,3.1 4.0,2.7 C 4.5,3.1 4.55,3.5 4.4,3.75 Z" /> <!-- Onion Bulb -->
+        <path d="M 3.9,2.7 C 3.95,2.67 4.05,2.67 4.1,2.7" /> <!-- Lotus Crest -->
+        <path d="M 4.0,2.65 L 4.0,2.1" /> <!-- Finial Spire -->
+        <circle cx="4.0" cy="2.3" r="0.03" /> <!-- Finial Crescent -->
+
+        <!-- Left Chhatri (Cupola on Pillars) -->
+        <path d="M 3.25,3.9 L 3.25,3.6 M 3.5,3.9 L 3.5,3.6" />
+        <path d="M 3.2,3.6 C 3.15,3.45 3.2,3.3 3.375,3.2 C 3.55,3.3 3.6,3.45 3.55,3.6 Z" />
+        <path d="M 3.375,3.2 L 3.375,3.0" />
+
+        <!-- Right Chhatri (Cupola on Pillars) -->
+        <path d="M 4.5,3.9 L 4.5,3.6 M 4.75,3.9 L 4.75,3.6" />
+        <path d="M 4.45,3.6 C 4.4,3.45 4.45,3.3 4.625,3.2 C 4.8,3.3 4.85,3.45 4.8,3.6 Z" />
+        <path d="M 4.625,3.2 L 4.625,3.0" />
+
+        <!-- Left Corner Minaret -->
+        <path d="M 2.75,4.8 L 2.8,3.1 L 2.9,3.1 L 2.95,4.8 Z" /> <!-- Shaft -->
+        <path d="M 2.73,4.25 L 2.97,4.25" /> <!-- Balcony 1 -->
+        <path d="M 2.76,3.7 L 2.94,3.7" /> <!-- Balcony 2 -->
+        <path d="M 2.8,3.1 L 2.9,3.1" /> <!-- Balcony 3 -->
+        <path d="M 2.82,3.1 L 2.82,2.9 M 2.88,3.1 L 2.88,2.9" /> <!-- Cupola Pillars -->
+        <path d="M 2.8,2.9 C 2.77,2.8 2.8,2.65 2.85,2.6 C 2.9,2.65 2.93,2.8 2.9,2.9 Z" /> <!-- Cupola Dome -->
+        <path d="M 2.85,2.6 L 2.85,2.4" />
+
+        <!-- Right Corner Minaret -->
+        <path d="M 5.05,4.8 L 5.1,3.1 L 5.2,3.1 L 5.25,4.8 Z" /> <!-- Shaft -->
+        <path d="M 5.03,4.25 L 5.27,4.25" /> <!-- Balcony 1 -->
+        <path d="M 5.06,3.7 L 5.24,3.7" /> <!-- Balcony 2 -->
+        <path d="M 5.1,3.1 L 5.2,3.1" /> <!-- Balcony 3 -->
+        <path d="M 5.12,3.1 L 5.12,2.9 M 5.18,3.1 L 5.18,2.9" /> <!-- Cupola Pillars -->
+        <path d="M 5.1,2.9 C 5.07,2.8 5.1,2.65 5.15,2.6 C 5.2,2.65 5.23,2.8 5.2,2.9 Z" /> <!-- Cupola Dome -->
+        <path d="M 5.15,2.6 L 5.15,2.4" />
+      </g>
+    `;
+    flagDef = `
+      <g id="flag" opacity="0.8">
+        <rect x="0.15" y="0.26" width="0.7" height="0.16" fill="#FF9933" />
+        <rect x="0.15" y="0.42" width="0.7" height="0.16" fill="#FFFFFF" />
+        <rect x="0.15" y="0.58" width="0.7" height="0.16" fill="#138808" />
+        <circle cx="0.5" cy="0.5" r="0.04" stroke="#000080" stroke-width="0.008" fill="none" />
+      </g>
+    `;
   } else if (themeKey === 'iran') {
-    gradStart = isWhite ? '#e8faf7' : '#1b263b';
-    gradEnd = isWhite ? '#7ce3d8' : '#0d131f';
-    // Deep navy stroke for white pieces, mint/light stroke for black pieces
-    strokeColor = isWhite ? '#080d1a' : '#e8faf7';
-  } else { // russia
-    gradStart = isWhite ? '#ffffff' : '#334155';
-    gradEnd = isWhite ? '#cbd5e1' : '#0f172a';
-    // Deep slate/dark stroke for white pieces, snow white stroke for black pieces
-    strokeColor = isWhite ? '#1e293b' : '#f1f5f9';
+    // Persian Lion & Sun emblem centering inside 1x1 squares
+    defs = `
+      <g id="motif" stroke-width="0.035" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.12">
+        <!-- Sun and rays -->
+        <circle cx="0.58" cy="0.4" r="0.1" />
+        <path d="M 0.58,0.3 L 0.58,0.24" />
+        <path d="M 0.51,0.33 L 0.46,0.28" />
+        <path d="M 0.65,0.33 L 0.7,0.28" />
+        <path d="M 0.48,0.4 L 0.42,0.4" />
+        <path d="M 0.68,0.4 L 0.74,0.4" />
+        <!-- Lion silhouette (standing profile looking left) -->
+        <path d="M 0.3,0.75 L 0.34,0.55 C 0.34,0.55 0.3,0.51 0.3,0.45 C 0.3,0.39 0.36,0.33 0.42,0.35 C 0.48,0.37 0.5,0.43 0.5,0.47 C 0.5,0.51 0.46,0.55 0.48,0.59 C 0.5,0.63 0.58,0.61 0.64,0.62 C 0.68,0.63 0.72,0.67 0.72,0.75" />
+        <path d="M 0.64,0.62 C 0.7,0.59 0.74,0.51 0.72,0.45" /> <!-- Tail -->
+      </g>
+    `;
+    flagDef = `
+      <g id="flag" opacity="0.8">
+        <rect x="0.15" y="0.26" width="0.7" height="0.16" fill="#239E46" />
+        <rect x="0.15" y="0.42" width="0.7" height="0.16" fill="#FFFFFF" />
+        <rect x="0.15" y="0.58" width="0.7" height="0.16" fill="#DA251D" />
+        <circle cx="0.5" cy="0.5" r="0.03" fill="#DA251D" />
+      </g>
+    `;
+  } else if (themeKey === 'russia') {
+    // Saint Basil's Cathedral silhouette centering inside 1x1 squares
+    defs = `
+      <g id="motif" stroke-width="0.035" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.12">
+        <!-- Center Dome -->
+        <path d="M 0.44,0.75 L 0.44,0.48 C 0.44,0.48 0.4,0.42 0.4,0.32 C 0.4,0.22 0.47,0.2 0.5,0.14 C 0.53,0.2 0.6,0.22 0.6,0.32 C 0.6,0.42 0.56,0.48 0.56,0.48 L 0.56,0.75" />
+        <path d="M 0.5,0.06 L 0.5,0.14 M 0.47,0.09 L 0.53,0.09" stroke-width="0.025" /> <!-- Cross -->
+        <!-- Left Dome -->
+        <path d="M 0.26,0.75 L 0.26,0.56 C 0.26,0.56 0.23,0.52 0.23,0.45 C 0.23,0.38 0.28,0.36 0.3,0.32 C 0.32,0.36 0.37,0.38 0.37,0.45 C 0.37,0.52 0.34,0.56 0.34,0.56 L 0.34,0.75" />
+        <!-- Right Dome -->
+        <path d="M 0.66,0.75 L 0.66,0.56 C 0.66,0.56 0.63,0.52 0.63,0.45 C 0.63,0.38 0.68,0.36 0.7,0.32 C 0.72,0.36 0.77,0.38 0.77,0.45 C 0.77,0.52 0.74,0.56 0.74,0.56 L 0.74,0.75" />
+        <!-- Base platform -->
+        <path d="M 0.2,0.75 L 0.8,0.75" />
+      </g>
+    `;
+    flagDef = `
+      <g id="flag" opacity="0.8">
+        <rect x="0.15" y="0.26" width="0.7" height="0.16" fill="#FFFFFF" />
+        <rect x="0.15" y="0.42" width="0.7" height="0.16" fill="#0033A0" />
+        <rect x="0.15" y="0.58" width="0.7" height="0.16" fill="#DA251D" />
+      </g>
+    `;
   }
 
-  // Base Pedestal
-  const baseHtml = `
-    <path d="M 30,82 L 70,82 C 70,78 68,76 64,76 L 36,76 C 32,76 30,78 30,82 Z" />
-    <rect x="22" y="82" width="56" height="5" rx="2" />
-  `;
-
-  // Draw piece geometries depending on theme
-  let bodyContent = '';
-  
-  if (themeKey === 'india') {
-    // INDIA Theme Pieces (Lotus curves, dome style)
-    if (pieceType === 'p') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 38,76 C 40,64 43,54 47,44 L 53,44 C 57,54 60,64 62,76 Z" />
-        <circle cx="50" cy="32" r="13" />
-      `;
-    } else if (pieceType === 'r') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 34,76 L 37,46 L 63,46 L 66,76 Z" />
-        <path d="M 32,46 C 32,32 40,26 50,26 C 60,26 68,32 68,46 Z" />
-        <path d="M 50,26 L 50,18" />
-      `;
-    } else if (pieceType === 'n') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 33,76 C 33,76 36,72 36,66 C 36,56 31,52 29,45 C 27,37 33,26 43,20 C 51,16 59,20 61,26 C 63,32 59,38 57,42 C 55,46 57,50 57,50 C 57,50 53,48 49,50 C 45,52 45,56 45,56 L 47,62 L 41,66 L 43,76 Z" />
-      `;
-    } else if (pieceType === 'b') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 36,76 C 38,66 40,54 43,44 C 43,44 38,40 42,26 C 46,14 54,14 58,26 C 62,40 57,44 57,44 C 60,58 62,66 64,76 Z" />
-        <circle cx="50" cy="14" r="3.5" />
-        <path d="M 46,36 L 54,40" stroke-linecap="round" />
-      `;
-    } else if (pieceType === 'q') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 36,76 C 38,66 42,56 44,46 L 32,36 L 42,44 L 50,22 L 58,44 L 68,36 L 56,46 C 58,56 62,66 64,76 Z" />
-        <circle cx="32" cy="36" r="3" />
-        <circle cx="50" cy="22" r="3" />
-        <circle cx="68" cy="36" r="3" />
-      `;
-    } else { // King
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 36,76 C 38,66 42,56 44,48 C 42,48 36,44 40,28 C 44,18 56,18 60,28 C 64,44 58,48 56,48 C 58,66 62,76 64,76 Z" />
-        <path d="M 50,12 L 50,20 M 45,15 C 47,17 53,17 55,15" />
-      `;
-    }
-  } else if (themeKey === 'iran') {
-    // IRAN Theme Pieces (Geometric minarets, diamond cuts)
-    if (pieceType === 'p') {
-      bodyContent = `
-        <polygon points="50,20 63,44 50,76 37,44" />
-        <polygon points="50,76 64,82 36,82" />
-      `;
-    } else if (pieceType === 'r') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 36,76 L 39,46 L 61,46 L 64,76 Z" />
-        <polygon points="33,46 33,34 42,34 42,40 58,40 58,34 67,34 67,46" />
-      `;
-    } else if (pieceType === 'n') {
-      bodyContent = `
-        <polygon points="32,82 40,82 42,66 32,54 30,42 42,24 58,24 62,34 54,42 50,42 46,46 44,56 38,62 40,82" />
-      `;
-    } else if (pieceType === 'b') {
-      bodyContent = `
-        <polygon points="50,18 62,38 56,66 62,82 38,82 44,66 38,38" />
-        <line x1="45" y1="36" x2="55" y2="44" />
-      `;
-    } else if (pieceType === 'q') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 36,76 L 42,46 L 30,40 L 44,40 L 50,22 L 56,40 L 70,40 L 58,46 L 64,76 Z" />
-        <circle cx="30" cy="40" r="3.5" />
-        <circle cx="50" cy="22" r="3.5" />
-        <circle cx="70" cy="40" r="3.5" />
-      `;
-    } else { // King
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 36,76 L 42,46 L 34,42 L 44,42 L 50,24 L 56,42 L 66,42 L 58,46 L 64,76 Z" />
-        <path d="M 45,14 C 47,12 53,12 55,14" />
-      `;
-    }
-  } else {
-    // RUSSIA Theme Pieces (Onion dome style, imperial crown)
-    if (pieceType === 'p') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 35,76 L 65,76 L 61,62 C 56,52 62,46 50,32 C 38,46 44,52 39,62 Z" />
-        <circle cx="50" cy="26" r="5" />
-      `;
-    } else if (pieceType === 'r') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 35,76 L 38,50 L 62,50 L 65,76 Z" />
-        <path d="M 34,50 C 34,38 38,30 50,22 C 62,30 66,38 66,50 Z" />
-        <path d="M 50,22 L 50,15" />
-      `;
-    } else if (pieceType === 'n') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 32,76 L 42,76 L 44,66 C 44,66 38,60 38,52 C 38,42 42,30 52,22 C 58,18 62,22 60,30 C 58,34 52,38 50,44 C 48,48 48,52 44,56 L 46,62 L 38,66 Z" />
-      `;
-    } else if (pieceType === 'b') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 36,76 C 38,66 41,58 44,48 C 41,44 38,36 50,20 C 62,36 59,44 56,48 C 59,58 62,72 64,76 Z" />
-        <path d="M 50,12 L 50,22 M 46,14 L 54,14 M 47,17 L 53,19" />
-      `;
-    } else if (pieceType === 'q') {
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 36,76 C 38,66 41,56 44,48 C 42,48 35,46 38,30 C 41,32 45,38 50,26 C 55,38 59,32 62,30 C 65,44 58,48 56,48 C 59,60 62,70 64,76 Z" />
-      `;
-    } else { // King
-      bodyContent = `
-        ${baseHtml}
-        <path d="M 36,76 C 38,66 41,56 44,48 C 42,48 34,46 38,30 C 42,32 46,40 50,26 C 54,40 58,32 62,30 C 66,46 58,48 56,48 C 58,60 62,70 64,76 Z" />
-        <path d="M 50,14 L 50,24 M 46,17 L 54,17" />
-      `;
-    }
+  if (defs) {
+    const centerSquares = [
+      { x: 3, y: 3, isLight: true },
+      { x: 4, y: 3, isLight: false },
+      { x: 3, y: 4, isLight: false },
+      { x: 4, y: 4, isLight: true }
+    ];
+    centerSquares.forEach(sq => {
+      const strokeColor = sq.isLight ? darkColor : lightColor;
+      motifInstances += `<use href="#motif" x="${sq.x}" y="${sq.y}" stroke="${strokeColor}"/>`;
+    });
   }
 
-  // Country-themed motifs overlays
-  let motif = '';
-  if (themeKey === 'india') {
-    motif = `<circle cx="50" cy="62" r="3.5" fill="#d4af37" stroke="none" />`;
-  } else if (themeKey === 'iran') {
-    motif = `<polygon points="50,56 54,60 50,64 46,60" fill="#ffffff" fill-opacity="0.4" stroke="#e2e8f0" stroke-width="0.8" />`;
-  } else { // russia
-    motif = `<polygon points="50,56 51.5,60 55,60 52,62 53.5,65 50,63 46.5,65 48,62 45,60 48.5,60" fill="#ffd700" stroke="none" />`;
+  if (flagDef) {
+    const corners = [
+      { x: 0, y: 0 },
+      { x: 7, y: 0 },
+      { x: 0, y: 7 },
+      { x: 7, y: 7 }
+    ];
+    corners.forEach(sq => {
+      flagInstances += `<use href="#flag" x="${sq.x}" y="${sq.y}"/>`;
+    });
   }
 
   const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="100%" height="100%">
       <defs>
-        <linearGradient id="${gradientId}" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${gradStart}" />
-          <stop offset="100%" stop-color="${gradEnd}" />
-        </linearGradient>
+        ${defs}
+        ${flagDef}
       </defs>
-      <g fill="url(#${gradientId})" stroke="${strokeColor}" stroke-width="${strokeWidth}" stroke-linejoin="round" stroke-linecap="round">
-        ${bodyContent}
-        ${motif}
-      </g>
+      <rect width="8" height="8" fill="${lightColor}"/>
+      <path d="${darkSquares.map(sq => `M${sq.x},${sq.y}h1v1h-1z`).join(' ')}" fill="${darkColor}"/>
+      ${motifInstances}
+      ${flagInstances}
     </svg>
   `;
-
   return `url("data:image/svg+xml,${encodeURIComponent(svg.trim())}")`;
-}
-
-// Generate CSS declarations for overriding all chess pieces
-function generatePieceCssRules(themeKey) {
-  // If the themeKey is invalid/old, fallback to india to prevent style breaks
-  const validKey = THEMES[themeKey] ? themeKey : 'india';
-  const pieces = ['p', 'r', 'n', 'b', 'q', 'k'];
-  let css = '';
-  
-  pieces.forEach(p => {
-    const whiteImg = generatePieceSvg(validKey, p, true);
-    const blackImg = generatePieceSvg(validKey, p, false);
-    
-    css += `
-      /* White piece overrides */
-      wc-chess-board .w${p},
-      chess-board .w${p},
-      .board .w${p},
-      .piece.w${p},
-      .w${p} {
-        background-image: ${whiteImg} !important;
-      }
-      /* Black piece overrides */
-      wc-chess-board .b${p},
-      chess-board .b${p},
-      .board .b${p},
-      .piece.b${p},
-      .b${p} {
-        background-image: ${blackImg} !important;
-      }
-    `;
-  });
-  
-  return css;
 }
 
 // Keep track of active theme
@@ -290,8 +224,7 @@ function applyShadowTheme(boardEl) {
     return;
   }
   const theme = THEMES[currentThemeKey] || THEMES.india;
-  const boardImage = generateSvgUrl(theme.light, theme.dark);
-  const pieceCss = generatePieceCssRules(currentThemeKey);
+  const boardImage = generateSvgUrl(theme.light, theme.dark, currentThemeKey);
   const cssText = `
     :host,
     .board,
@@ -303,7 +236,6 @@ function applyShadowTheme(boardEl) {
     .chessboard-component[class] {
       background-image: ${boardImage} !important;
     }
-    ${pieceCss}
   `;
   injectShadowStyles(boardEl, cssText);
 }
@@ -327,8 +259,7 @@ function applyTheme(themeKey) {
   }
 
   const theme = THEMES[themeKey];
-  const boardImage = generateSvgUrl(theme.light, theme.dark);
-  const pieceCss = generatePieceCssRules(themeKey);
+  const boardImage = generateSvgUrl(theme.light, theme.dark, themeKey);
 
   let styleEl = document.getElementById('chesscom-board-customizer-theme');
   if (!styleEl) {
@@ -373,9 +304,6 @@ function applyTheme(themeKey) {
       fill: var(--custom-dark-coord-color) !important;
       color: var(--custom-dark-coord-color) !important;
     }
-
-    /* Custom chess piece styles (global) */
-    ${pieceCss}
   `;
 
   // Also apply styles inside open shadow roots
@@ -406,8 +334,8 @@ const observer = new MutationObserver((mutations) => {
     }
   }
 });
-observer.observe(document.documentElement, { 
-  childList: true, 
+observer.observe(document.documentElement, {
+  childList: true,
   subtree: true,
   attributes: true,
   attributeFilter: ['class', 'style']

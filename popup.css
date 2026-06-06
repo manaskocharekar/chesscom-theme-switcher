@@ -14,7 +14,7 @@
 body {
   margin: 0;
   padding: 0;
-  width: 330px; /* Slightly wider to accommodate custom piece previews */
+  width: 290px;
   background-color: var(--bg-primary);
   font-family: var(--font-family);
   color: var(--text-primary);
@@ -144,13 +144,7 @@ h1 {
 .russia .sq.light { background-color: #f1f5f9; }
 .russia .sq.dark { background-color: #961b1b; }
 
-/* Custom Piece Preview Icon */
-.piece-preview-icon {
-  width: 28px;
-  height: 28px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
-  flex-shrink: 0;
-}
+/* Piece previews removed - board customization only */
 
 /* Info Section */
 .theme-info {
