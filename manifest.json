@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Chess.com Board Color Customizer",
+  "name": "chesscom-theme-switcher",
   "version": "1.0",
   "description": "Customize your chess.com board with 3 premium, elegant color combinations.",
   "permissions": [
